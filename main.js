@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); // (FOV - vertical between 75 to 85,aspect ratio : width of render / height of render, near - like near point of the eye,far) Any object farther or nearer to the camera will not be visible
 const canvas = document.querySelector('canvas.webgl')
 
 const renderer = new THREE.WebGLRenderer({
@@ -18,6 +18,7 @@ const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
 
 camera.position.z = 3;
+console.log(camera.position.length()) // returns distance
 
 //time
 // var time = Date.now()
