@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
 const scene = new THREE.Scene();
 
@@ -27,12 +28,19 @@ const camera = new THREE.PerspectiveCamera( 75, sizes.width / sizes.height, 0.1,
 // 	-1,
 // 	0.1,
 // 	100)
+
 camera.position.z =2;
 const canvas = document.querySelector('canvas.webgl')
+
 
 const renderer = new THREE.WebGLRenderer({
 	canvas: canvas
 });
+// controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true //to give acceleration and friction , has to be updated in every frame so control.update() in tick function
+// controls.target.y =1; // to change the target
+// controls.update();
 renderer.setSize( sizes.width, sizes.height );
 // renderer.setSize( window.innerWidth, window.innerHeight );
 // renderer.setAnimationLoop( animate );
@@ -95,11 +103,12 @@ const tick = ()=>{
 	// camera.position.y = cursor.y * 10
 
 	// Move the camera around the center with only 1 revolutions showing 4 faces of cube in each axis
-	camera.position.x = Math.sin(cursor.x * Math.PI * 2) *3 ; 
-	camera.position.z = Math.cos(cursor.x * Math.PI * 2 ) * 3;
-	camera.position.y = cursor.y * 5;
+	// camera.position.x = Math.sin(cursor.x * Math.PI * 2) *3 ; 
+	// camera.position.z = Math.cos(cursor.x * Math.PI * 2 ) * 3;
+	// camera.position.y = cursor.y * 5;
 	// camera.lookAt(new THREE.Vector3())
 	camera.lookAt(cube.position)
+	controls.update();
 
 
 	//render
