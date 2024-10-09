@@ -3,22 +3,31 @@ import gsap from 'gsap';
 
 const scene = new THREE.Scene();
 
+// cursor 
+const cursor = {
+	x:0,
+	y:0
+}
+window.addEventListener('mousemove',(event)=>{
+	cursor.x = event.clientX/sizes.width - 0.5; // divides in 4 quadrants
+	cursor.y = -(event.clientY/sizes.height - 0.5);
+	console.log(cursor.x,cursor.y);
+})
+
 const sizes = {
 	width: 800,
 	height:600
 }
 const aspectRatio  = sizes.width / sizes.height;
-// const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); // (FOV - vertical between 75 to 85,aspect ratio : width of render / height of render, near - like near point of the eye,far) Any object farther or nearer to the camera will not be visible
-const camera = new THREE.OrthographicCamera(
-	-1 *aspectRatio,
-	1 *aspectRatio, // multiply with aspect ratio , so that the shape/mesh can be viewed exactly same from different references
-	1,
-	-1,
-	0.1,
-	100)
-camera.position.x =-0.1;
-camera.position.y =0.2;
-camera.position.z =1;
+const camera = new THREE.PerspectiveCamera( 75, sizes.width / sizes.height, 0.1, 1000 ); // (FOV - vertical between 75 to 85,aspect ratio : width of render / height of render, near - like near point of the eye,far) Any object farther or nearer to the camera will not be visible
+// const camera = new THREE.OrthographicCamera(
+// 	-1 *aspectRatio,
+// 	1 *aspectRatio, // multiply with aspect ratio , so that the shape/mesh can be viewed exactly same from different references
+// 	1,
+// 	-1,
+// 	0.1,
+// 	100)
+camera.position.z =2;
 const canvas = document.querySelector('canvas.webgl')
 
 const renderer = new THREE.WebGLRenderer({
@@ -75,11 +84,22 @@ const tick = ()=>{
 	// update the object
 	// cube.rotation.y += 0.002 * deltaTime; // multiply so that it can animate in right fps
 	// cube.position.x +=0.01 * deltaTime;
-	cube.rotation.x = elapsedTime  * Math.PI; // 1 rev per second
-	cube.rotation.y = elapsedTime  * Math.PI; // 1 rev per second
+	// cube.rotation.x = elapsedTime  * Math.PI/2; // 1 rev per second
+	// cube.rotation.y = elapsedTime  * Math.PI/2; // 1 rev per second
 	// cube.position.x = Math.sin(elapsedTime)
 	// cube.position.y = Math.cos(elapsedTime);
 	// camera.lookAt(cube.position) // always looking at cube
+
+	// update camera 
+	// camera.position.x = cursor.x * 10
+	// camera.position.y = cursor.y * 10
+
+	// Move the camera around the center with only 1 revolutions showing 4 faces of cube in each axis
+	camera.position.x = Math.sin(cursor.x * Math.PI * 2) *3 ; 
+	camera.position.z = Math.cos(cursor.x * Math.PI * 2 ) * 3;
+	camera.position.y = cursor.y * 5;
+	// camera.lookAt(new THREE.Vector3())
+	camera.lookAt(cube.position)
 
 
 	//render
